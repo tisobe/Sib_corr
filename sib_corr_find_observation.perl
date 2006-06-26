@@ -64,6 +64,25 @@ close(FH);
 system("rm zout");
 
 #
+#--- remove duplicated obsid
+#
+
+$first = shift(@obsid_list);
+@new   = ($first);
+
+OUTER:
+foreach $ent (@obsid_list){
+	foreach $comp (@new){
+		if($ent =~ /$comp/){
+			next OUTER;
+		}
+	}
+	push(@new, $ent);
+}
+
+@obsid_list = @new;
+
+#
 #----- setting for sql database access
 #
 
