@@ -66,6 +66,7 @@ foreach $ent (@input_list){
 		}
 	}
 	close(FH);
+	system("rm ztest");
 #
 #--- if the fits file contains data between tstart and tstop, keep them for
 #--- further analysis

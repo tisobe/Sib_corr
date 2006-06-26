@@ -30,6 +30,7 @@ while(<FH>){
 }
 close(OUT);
 close(FH);
+system("rm zlist");
 
 $test = `ls *`;
 if($test =~ /Input/){

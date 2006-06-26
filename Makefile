@@ -5,7 +5,7 @@ TASK = Sib_corr
 
 include /data/mta/MTA/include/Makefile.MTA
 
-BIN  = sib_corr_comb.perl sib_corr_comp_sib.per sib_corr_find_observation.perl sib_corr_get_data.per 
+BIN  = sib_corr_comb.perl sib_corr_comp_sib.perl sib_corr_find_observation.perl sib_corr_get_data.perl sib_corr_plot_lres.perl
 
 DOC  = README
 
