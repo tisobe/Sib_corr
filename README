@@ -14,6 +14,15 @@
  
 	https://icxc.harvard.edu/mta/CUS/Usint/ocatdata2html.cgi?<obsid>
 
+	or run:
+
+	perl ./Sib_corr/mk_img_html.perl
+
+	to create all ROSAT image on one page:
+
+	/data/mta/Script/ACIS/SIB/Correct_excess/target_image.html
+
+
    In general, remove all abell clusters, planets, comets, and all bright x ray sources
    such as crab, cas A  and M87.
 
@@ -23,6 +32,12 @@
    run to extract data from archive:
 
 	perl /data/mta/MTA/bin/sib_corr_get_data.perl 
+
+	perl ./Sib_corr/sib_corr_get_data_lev2.perl
+
+   run the lev2 version first, since the data size is smaller and it will finish quicker.
+   then after removing all un-wanted observations (extended sources), you can run lev 1
+    version.
 
    where we assume "./acis_obs", the list we just created, is in the same directory.
 
@@ -56,6 +71,7 @@
 6 Plot data
 
 	perl /data/mta/MTA/bin/sib_corr_plot_lres.perl <year> <month>
+	perl ./Sib_corr/sib_corr_plot_lres.perl (for Lev 2)
 		----- run this on rhodes (need to access /data/mta4/MTA/data/no_data.gif)
 
 	where <year>		year of the observation
@@ -69,8 +85,22 @@
 
 	if you find one, find which one is the high dose observation form the list we made.
 	go to ./Outdir/lres/, make ./Outdir/lres/save/ dirctory and move that data to the directory
+
+	to do this more efficiently, run ./Sib_corr/find_time.perl > tlist
+	then dmlist "./Data/lres_ccd7_merged.fits[cols time,hard]" opt=data > zout
+
+	and find all sources count rate > 150 or so (you can decide the level).
+
 	run step 5 and 6 to see whether all the high doese/extended sources are removed.
 	if not, just repeat.
+
+8. Created plots for long terms for lev 2 data
+
+	run:
+		perl Sib_corr/acis_sib_one_year_plot_lev2.perl
+		perl Sib_corr/acis_sib_long_term_lev2.perl
+	and 
+		perl Sib_corr/acis_sib_comb_plot_lev2.perl
 
 8. Clearn up.
 	move all resulted fits files (from Data directory) and plots (from Plots) to a web site

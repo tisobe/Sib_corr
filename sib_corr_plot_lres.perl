@@ -747,9 +747,17 @@ sub find_y_range{
                         $ymin = 0;
                 }
                 $ymax  = $tavg + 4.0 * $tsig;
-                $ymax *= 10;
-                $ymax  = int $ymax;
-                $ymax /= 10;
+		if($ymax > 0.5){
+                	$ymax *= 10;
+                	$ymax  = int $ymax;
+                	$ymax /= 10;
+#		}elsif($ymax <0.1){
+                	$ymax *= 100;
+                	$ymax  = int $ymax;
+                	$ymax /= 100;
+#		}else{
+#			$ymax = 0.5;
+		}
         
                 if($ymax <= $ymin){
                         $ymax = $ymin + 1;

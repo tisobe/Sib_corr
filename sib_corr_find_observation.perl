@@ -1,5 +1,5 @@
-#!/usr/bin/perl
-BEGIN { $ENV{'SYBASE'} = "/soft/sybase"; }
+#!/proj/DS.ots/perl-5.10.0.SunOS5.8/bin/perl
+BEGIN { $ENV{'SYBASE'} = "/soft/SYBASE_OCS15"; }
 use DBI;
 use DBD::Sybase;
 
@@ -10,7 +10,7 @@ use DBD::Sybase;
 #												#
 #		author: t. isobe (tisobe@cfa.harvard.edu)					#
 #												#
-#		last update: Jan 23, 2005							#
+#		last update: May 20, 2008							#
 #												#
 #################################################################################################
 
@@ -90,7 +90,7 @@ $db_user = "browser";
 $server  = "ocatsqlsrv";
 
 $db_passwd =`cat /proj/web-icxc/cgi-bin/obs_ss/.Pass_dir/.targpass`;
-chop $db_passwd;
+chomp $db_passwd;
 
 @date_list = ();
 
