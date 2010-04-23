@@ -3,7 +3,10 @@
 
 1. get a list of observations between <start> and <stop>.
 
-	perl /data/mta/MTA/bin/sib_corr_find_observation.perl <start> <stop>
+	/soft/ascds/DS.release/ots/bin/perl  /data/mta/MTA/bin/sib_corr_find_observation.perl <start> <stop>
+
+####	/proj/DS.ots/perl-5.10.0.SunOS5.8/bin/perl  /data/mta/MTA/bin/sib_corr_find_observation.perl <start> <stop>
+
 
    where the format for <start> and <stop> is MM/DD/YY,HH:MM:SS. The output will be directed 
    into "./acis_obs" file. This script must be run on rhodes. Steps 3, 4, and 5 can be run on colossus.
@@ -16,7 +19,7 @@
 
 	or run:
 
-	perl ./Sib_corr/mk_img_html.perl
+	/soft/ascds/DS.release/ots/bin/perl  ./Sib_corr/mk_img_html.perl
 
 	to create all ROSAT image on one page:
 
@@ -32,6 +35,7 @@
    run to extract data from archive:
 
 	perl /data/mta/MTA/bin/sib_corr_get_data.perl 
+		(see the new version of sib_corr_comp_sib.perl below)
 
 	perl ./Sib_corr/sib_corr_get_data_lev2.perl
 
@@ -50,12 +54,22 @@
 		rm -rf param
 		mkdir param
 		source /home/mta/bin/reset_param
-		setenv PFILES "${PDIRS}:${SYSPFILES}" 
+		setenv PFILES "${PDIRS}" 
 		set path = (/home/ascds/DS.release/bin/  $path)
-		setenv MTA_REPORT_DIR  /data/mta/Script/ACIS/SIB/Correct_excess/Reportdir/
-					of (your working directory, with /Reportdir at the ned).
+		for Lev1
+		setenv MTA_REPORT_DIR  /data/mta/Script/ACIS/SIB/Correct_excess/Lev1/Reportdir/
+		for Lev2
+		setenv MTA_REPORT_DIR  /data/mta/Script/ACIS/SIB/Correct_excess/Lev2/Reportdir/
+
+					or (your working directory, with /Reportdir at the ned).
 
 	perl /data/mta/MTA/bin/sib_corr_comp_sib.perl
+
+	for level 1 events, you may want to run
+
+	perl ./Sib_corr/sib_corr_comp_sib_modified.perl
+
+	which read acis_obs and extract one file at a time to create necessary data.
 
    This will create results in ./Outdir/lres/mtaf<obsid>_*_sibkg1.fits.
 
@@ -70,8 +84,8 @@
 
 6 Plot data
 
-	perl /data/mta/MTA/bin/sib_corr_plot_lres.perl <year> <month>
-	perl ./Sib_corr/sib_corr_plot_lres.perl (for Lev 2)
+	/opt/local/bin/perl /data/mta/MTA/bin/sib_corr_plot_lres.perl <year> <month>
+	/opt/local/bin/perl ./Sib_corr/sib_corr_plot_lres.perl (for Lev 2)
 		----- run this on rhodes (need to access /data/mta4/MTA/data/no_data.gif)
 
 	where <year>		year of the observation
@@ -87,7 +101,7 @@
 	go to ./Outdir/lres/, make ./Outdir/lres/save/ dirctory and move that data to the directory
 
 	to do this more efficiently, run ./Sib_corr/find_time.perl > tlist
-	then dmlist "./Data/lres_ccd7_merged.fits[cols time,hard]" opt=data > zout
+	then dmlist "./Data/lres_ccd7_merged.fits[cols time,med]" opt=data > zout
 
 	and find all sources count rate > 150 or so (you can decide the level).
 
@@ -97,10 +111,11 @@
 8. Created plots for long terms for lev 2 data
 
 	run:
-		perl Sib_corr/acis_sib_one_year_plot_lev2.perl
-		perl Sib_corr/acis_sib_long_term_lev2.perl
+		/opt/local/bin/perl Sib_corr/acis_sib_one_year_plot_lev2.perl
+		/opt/local/bin/perl Sib_corr/acis_sib_long_term_lev2.perl
+		/opt/local/bin/perl Sib_corr/acis_sib_comb_plot_lev2.perl
 	and 
-		perl Sib_corr/acis_sib_comb_plot_lev2.perl
+		/opt/local/bin/perl Sib_corr/update_lev2_html.perl
 
 8. Clearn up.
 	move all resulted fits files (from Data directory) and plots (from Plots) to a web site
