@@ -287,10 +287,10 @@ sub print_main{
 		}
 	}
 
-	print OUT '<img src ="./Plots/Plot_long/long_total_data_ccd6.gif" width=75%  height=50%>',"\n";
+	print OUT '<img src ="./Plots/Plot_long/long_total_data_ccd6.gif" width=85% ',"\n";
 	print OUT '<br>',"\n";
 
-	print OUT '<img src ="./Plots/comb_plot.gif" width=85%  height=65%>',"\n";
+	print OUT '<img src ="./Plots/comb_plot.gif" width=85% >',"\n";
 	print OUT '<br>',"\n";
 
 	print OUT '</center><P>',"\n";
@@ -380,7 +380,7 @@ sub print_main{
                 if($year_list[$i] != $year_list[$icnt-1]){
                         last OUTER;
                 }
-                $out_dir = './Plots/Plots_'."$year_list[$icnt-1]"."_$month_list[$i]";
+                $out_dir = './Plots/Plot_'."$year_list[$icnt-1]"."_$month_list[$i]";
 
                 $temp_month = $month_list[$i];
                 conv_no_ch_month();
@@ -442,14 +442,14 @@ sub print_img_html{
 
 	for($iccd = 0; $iccd < 10; $iccd++){
 		$file = 'ccd'."$iccd".'.html';
-		open(OUT, ">$web_dir/Plots/$this_month/$file"),"\n";
+		open(OUT, ">$web_dir/Plot/$this_month/$file"),"\n";
 
 		print OUT '<html>',"\n";
 		print OUT '<head><title>CCD',"$iccd",' plot</title></head>',"\n";
 		print OUT '<body TEXT="#000000" BGCOLOR="#FFFFFF">',"\n";
 		print OUT '<h2>CCD ',"$iccd",' SIB </h2>',"\n";
 		print OUT '<center>',"\n";
-		print OUT '<img src ="./total_data_ccd',"$iccd",'.gif", width = 75% height = 50%>',"\n";
+		print OUT '<img src ="./total_data_ccd',"$iccd",'.gif", width = 80% >',"\n";
 		print OUT "\n","\n";
 		print OUT '<hr>',"\n";
 		print OUT '<img src ="./indep_plot_ccd',"$iccd",'.gif", width = 100% height = 100%>',"\n";
@@ -476,7 +476,7 @@ sub print_long_html{
                 print OUT '<body TEXT="#000000" BGCOLOR="#FFFFFF">',"\n";
                 print OUT '<h2>CCD ',"$iccd",' SIB </h2>',"\n";
                 print OUT '<center>',"\n";
-                print OUT '<img src ="./long_total_data_ccd',"$iccd",'.gif", width=75% height=50%>',"\n";
+                print OUT '<img src ="./long_total_data_ccd',"$iccd",'.gif", width=80%>',"\n";
                 print OUT '\n',"\n";
                 print OUT '<hr>',"\n";
                 print OUT '<img src ="./long_indep_plot_ccd',"$iccd",'.gif", width = 100% height = 100%>',"\n";
@@ -502,7 +502,7 @@ sub print_past_year_html{
                 print OUT '<body TEXT="#000000" BGCOLOR="#FFFFFF">',"\n";
                 print OUT '<h2>CCD ',"$iccd",' SIB </h2>',"\n";
                 print OUT '<center>',"\n";
-                print OUT '<img src ="./long_total_data_ccd',"$iccd",'.gif", width=75% height=50%>',"\n";
+                print OUT '<img src ="./long_total_data_ccd',"$iccd",'.gif", width=80%>',"\n";
                 print OUT '\n',"\n";
                 print OUT '<hr>',"\n";
                 print OUT '<img src ="./long_indep_plot_ccd',"$iccd",'.gif", width = 100% height = 100%>',"\n";
