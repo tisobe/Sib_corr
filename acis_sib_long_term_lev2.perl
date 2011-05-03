@@ -3,11 +3,11 @@ use PGPLOT;
 
 #################################################################################################
 #												#
-#	acis_sib_long_term_lev2.perl: read all past sib data, and plot them for each CCD		#
+#	acis_sib_long_term_lev2.perl: read all past sib data, and plot them for each CCD	#
 #												#
 #	author: t. isobe (tisobe@cfa.harvard.edu)						#
 #												#
-#	last update: Apr 07, 2011								#
+#	last update: Apr 08, 2011								#
 #												#
 #################################################################################################
 
@@ -53,7 +53,7 @@ for($ccd = 0; $ccd < 10; $ccd++){
 #---- here is the directories where all the past data are stored
 #
 #$web_dir2 = '/data/mta/www/mta_sib/Lev2/';
-	$name = "$data_dir".'/Data_*_*/lres_ccd'."$ccd".'_merged.fits';
+	$name = "$data_dir".'/Data_*_*/lres_ccd'."$ccd".'_merged.fits*';
 #	$name = "$web_dir".'/Data/Data_*_*/lres_ccd'."$ccd".'_merged.fits';
 	$temp_data_list = `ls $name`;
 	@data_list = split(/\s+/, $temp_data_list);

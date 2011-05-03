@@ -7,7 +7,7 @@ use PGPLOT;
 #												#
 #	author: t. isobe (tisobe@cfa.harvard.edu)						#
 #												#
-#	last update: Mar 14, 2011								#
+#	last update: Apr 08, 2011								#
 #												#
 #################################################################################################
 
@@ -51,7 +51,7 @@ for($ccd = 0; $ccd < 10; $ccd++){
 #
 #---- here is the directories where all the past data are stored
 #
-	$name = "$data_dir".'/Data_*_*/lres_ccd'."$ccd".'_merged.fits';
+	$name = "$data_dir".'/Data_*_*/lres_ccd'."$ccd".'_merged.fits*';
 	$temp_data_list = `ls $name`;
 	@data_list = split(/\s+/, $temp_data_list);
 

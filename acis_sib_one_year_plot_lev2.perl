@@ -8,7 +8,7 @@ use PGPLOT;
 #											#
 #	author: t. isobe (tiosbe@cfa.harvard.edu)					#
 #											#
-#	last update: Apr 07, 2011							#
+#	last update: Apr 08, 2011							#
 #											#
 #########################################################################################
 
@@ -232,6 +232,12 @@ for($ccd = 0; $ccd < 10; $ccd++){
 		$cnt++;
 	}
 
+	@xdata    = @time;
+	$data_cnt = $cnt;
+	@rad = @all;
+	@ydata = @rad;
+	find_avg_and_range();		#--- find an average and  plotting range for y axis
+	robust_fit();
 
 	$xmin = $time[0];
 	$xmax = $time[$cnt -1];
@@ -239,12 +245,6 @@ for($ccd = 0; $ccd < 10; $ccd++){
 	$xmin -= 0.05 * $diff;
 	$xmax += 0.55 * $diff;
 
-	@xdata    = @time;
-	$data_cnt = $cnt;
-	@rad = @all;
-	@ydata = @rad;
-	find_avg_and_range();		#--- find an average and  plotting range for y axis
-	robust_fit();
 	find_y_range();
 
 	pgbegin(0, '"./Temp_data/pgplot.ps"/cps',1,1);
@@ -277,6 +277,13 @@ system("echo ''|gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  ./Temp
 	@ydata = @rad;
 	find_avg_and_range();
 	robust_fit();
+
+	$xmin = $time[0];
+	$xmax = $time[$cnt -1];
+	$diff = $xmax - $xmin;
+	$xmin -= 0.05 * $diff;
+	$xmax += 0.55 * $diff;
+
 	find_y_range();
 	$title = 'Super Soft Photons';
 	$color_index = 2;
@@ -286,6 +293,13 @@ system("echo ''|gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  ./Temp
 	@ydata = @rad;
 	find_avg_and_range();
 	robust_fit();
+
+	$xmin = $time[0];
+	$xmax = $time[$cnt -1];
+	$diff = $xmax - $xmin;
+	$xmin -= 0.05 * $diff;
+	$xmax += 0.55 * $diff;
+
 	find_y_range();
 	$title = 'Soft Photons';
 	$color_index = 4;
@@ -295,6 +309,13 @@ system("echo ''|gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  ./Temp
 	@ydata = @rad;
 	find_avg_and_range();
 	robust_fit();
+
+	$xmin = $time[0];
+	$xmax = $time[$cnt -1];
+	$diff = $xmax - $xmin;
+	$xmin -= 0.05 * $diff;
+	$xmax += 0.55 * $diff;
+
 	find_y_range();
 	$title = 'Moderate Energy Photons';
 	$color_index = 6;
@@ -304,6 +325,13 @@ system("echo ''|gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  ./Temp
 	@ydata = @rad;
 	find_avg_and_range();
 	robust_fit();
+
+	$xmin = $time[0];
+	$xmax = $time[$cnt -1];
+	$diff = $xmax - $xmin;
+	$xmin -= 0.05 * $diff;
+	$xmax += 0.55 * $diff;
+
 	find_y_range();
 	$title = 'Hard Photons';
 	$color_index = 8;
@@ -313,6 +341,13 @@ system("echo ''|gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  ./Temp
 	@ydata = @rad;
 	find_avg_and_range();
 	robust_fit();
+
+	$xmin = $time[0];
+	$xmax = $time[$cnt -1];
+	$diff = $xmax - $xmin;
+	$xmin -= 0.05 * $diff;
+	$xmax += 0.55 * $diff;
+
 	find_y_range();
 	$title = 'Very Hard  Photons';
 	$color_index = 10;
@@ -322,6 +357,13 @@ system("echo ''|gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  ./Temp
 	@ydata = @rad;
 	find_avg_and_range();
 #	robust_fit();
+
+	$xmin = $time[0];
+	$xmax = $time[$cnt -1];
+	$diff = $xmax - $xmin;
+	$xmin -= 0.05 * $diff;
+	$xmax += 0.55 * $diff;
+
 	if($tot > 0){
 		double_fit();
 		find_y_range();

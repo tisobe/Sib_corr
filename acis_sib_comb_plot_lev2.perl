@@ -6,7 +6,7 @@ use PGPLOT;
 #	acis_sib_comb_plot.perl: this script plots ccd5, 6, and 7 data 			#
 #											#
 #	Author: T. Isobe (tisobe@cfa.harvard.edu)					#
-#	Last Update: Apr 07, 2011							#
+#	Last Update: Apr 08, 2011							#
 #											#
 #########################################################################################
 
@@ -16,7 +16,7 @@ use PGPLOT;
 #
 $bin_dir  = '/data/mta/MTA/bin/';
 $bdata_dir = '/data/mta/MTA/data/';
-$data_dir = '/data/mta/Script/ACIS/SIb/Lev2/Data/';
+$data_dir = '/data/mta/Script/ACIS/SIB/Lev2/Data/';
 $web_dir  = '/data/mta/www/mta_sib/Lev2/';
 
 $lookup   = '/home/ascds/DS.release/data/dmmerge_header_lookup.txt';	# dmmerge header rule lookup table
