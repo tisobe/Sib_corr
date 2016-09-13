@@ -1,125 +1,127 @@
+#####################
+ACIS SIB Computation
+#####################
 
-0. Go to a directory: /data/mta/Script/Sib/Correct_excess/ or wherever you want to work at.
+++++++++
+Scripts
+++++++++
 
-1. get a list of observations between <start> and <stop>.
-
-	/soft/ascds/DS.release/ots/bin/perl  /data/mta/MTA/bin/sib_corr_find_observation.perl <start> <stop>
-
-####	/proj/DS.ots/perl-5.10.0.SunOS5.8/bin/perl  /data/mta/MTA/bin/sib_corr_find_observation.perl <start> <stop>
-
-
-   where the format for <start> and <stop> is MM/DD/YY,HH:MM:SS. The output will be directed 
-   into "./acis_obs" file. This script must be run on rhodes. Steps 3, 4, and 5 can be run on colossus.
-   (probably running on colossus is faster).
-
-2. check each observation visually to see  whether the source is extended.
-   Use ocatdata2html.cgi and check ROSAT data.
- 
-	https://icxc.harvard.edu/mta/CUS/Usint/ocatdata2html.cgi?<obsid>
-
-	or run:
-
-	/soft/ascds/DS.release/ots/bin/perl  ./Sib_corr/mk_img_html.perl
-
-	to create all ROSAT image on one page:
-
-	/data/mta/Script/ACIS/SIB/Correct_excess/target_image.html
+run_extract_evt1_wrap_script  
+run_extract_evt1_main_script  
+    --- environment setting wrapping script. extracting  level 1 data
+        call run_evt_script.py
 
 
-   In general, remove all abell clusters, planets, comets, and all bright x ray sources
-   such as crab, cas A  and M87.
+run_extract_evt2_wrap_script
+run_extract_evt2_main_script
+    --- environment setting wrapping script. extracting  level 2 data
+        call run_evt_script.py
 
-3. A new list contains lines like:
-	03412   FXRT011030      ACIS-S  Nov 29 2001 11:09AM     123505739       9771    100032
-
-   run to extract data from archive:
-
-	perl /data/mta/MTA/bin/sib_corr_get_data.perl 
-		(see the new version of sib_corr_comp_sib.perl below)
-
-	perl ./Sib_corr/sib_corr_get_data_lev2.perl
-
-   run the lev2 version first, since the data size is smaller and it will finish quicker.
-   then after removing all un-wanted observations (extended sources), you can run lev 1
-    version.
-
-   where we assume "./acis_obs", the list we just created, is in the same directory.
-
-   Extracted data will be saved in "./Input" directory.
+run_create_wrap_script  
+run_create_main_script  
+    --- combine the data for the month and create plots and update html pages
+        call create_sib_data.py
 
 
-4. run the main script:
+run_evt_script.py
+------------------
+extract sib data from event 1 or 2 acis data
+    input:  "Lev1" or "Lev2"
+    output: ./Output/lres/mtaf*_acis<ccd>_sibkg.fits
 
-	set:
-		rm -rf param
-		mkdir param
-		source /home/mta/bin/reset_param
-		setenv PFILES "${PDIRS}" 
-		set path = (/home/ascds/DS.release/bin/  $path)
-		for Lev1
-		setenv MTA_REPORT_DIR  /data/mta/Script/ACIS/SIB/Correct_excess/Lev1/Reportdir/
-		for Lev2
-		setenv MTA_REPORT_DIR  /data/mta/Script/ACIS/SIB/Correct_excess/Lev2/Reportdir/
+create_sib_data.py
+------------------
+create sib data for report
+    input:  none, but read ./Output/lres/mtaf*_acis<ccd>_skbgk.fits from both Lev1 and Lev2
+    output: <Lev#>/Data/Data_<yyyy>_<mm>/lres_ccd<ccd>_merged.fits
+            /data/mta_www/mta_sib/Plots/Plots_<yyyy>_<mm>/combined_month_plot_ccd<ccd>.png
+            /data/mta_www/mta_sib/Plots/Plots_<yyyy>_<mm>/month_plot_ccd<ccd>.png
+            /data/mta_www/mta_sib/Plots/Plot_<yyyy>/*png
+            /data/mta_www/mta_sib/Plots/Plot_long_term/*png
+            /data/mta_www/mta_sib/Plots/Plot_past_year/*png
+            /data/mta_www/mta_sib/Plots/Plot_quater/*png
 
-					or (your working directory, with /Reportdir at the ned).
+exclude_srouces.py
+------------------
+remove the area around the main source and all point sources from data 
+    input: fits file name to be examined
+    output: data excluded point sources
+            ./Reg_files/ratio_table --- indicates how much potion removed from the data
+                                        the value will be used to estimate SIB for the entire area
 
-	perl /data/mta/MTA/bin/sib_corr_comp_sib.perl
+    this script uses celldetect function
 
-	for level 1 events, you may want to run
+sib_corr_functions.py
+---------------------
+collections of functions used by other sib scripts
 
-	perl ./Sib_corr/sib_corr_comp_sib_modified.perl
 
-	which read acis_obs and extract one file at a time to create necessary data.
+ccd_comb_plot.py
+-----------------
+read data and create SIB plots
+    input:  ./Data/Data_<yyyy>_<mm>/lres_ccd<ccd>_merged.fits
+    output: /data/mta_www/mta_sib/Plots/Plots_<yyyy>_<mm>/combined_month_plot_ccd<ccd>.png
+            /data/mta_www/mta_sib/Plots/Plots_<yyyy>_<mm>/month_plot_ccd<ccd>.png
+            /data/mta_www/mta_sib/Plots/Plot_<yyyy>/*png
+            /data/mta_www/mta_sib/Plots/Plot_long_term/*png
+            /data/mta_www/mta_sib/Plots/Plot_past_year/*png
+            /data/mta_www/mta_sib/Plots/Plot_quater/*png
 
-   This will create results in ./Outdir/lres/mtaf<obsid>_*_sibkg1.fits.
+update_html.py
+--------------
+update the main sib page (sib_main.html) and update modified dates for a few sub html pages
+    input:   none
+    output: sib_main.html
+            <xxx>/long_term.html
+            <xxx>/past_one_year.html
+            <xxx>/quarter.html
+            where <xxx> are 'Plots/Plot_long_term/', ''Plots/Plot_past_year/', 'Plots/Plot_quarter/' etc
 
-5. Combined these data
+OcatSQL.py
+-----------
+read data from sql database to fill all Ocat Data Page pamater values 
+    input:  sybase data
+    output: various --- read the top part of the file for example. 
 
-	perl /data/mta/MTA/bin/sib_corr_comb.perl <start time> <end time>
+    This one was developed for Ocat Data Page. You may occasionally want to check update there.
 
-	where <start time>:	<year>:<y_date>:<hour>:<min>:<sec>
-	      <end time>:	<year>:<y_date>:<hour>:<min>:<sec>
+DBI.py
+------
+Ska.DBI provides simple methods for database access and data insertion.
+    read the file for the details. you may occasionally check update of this file at sot ska site.
 
-	The results are in Data   (such as ./Data/lres_ccd3_merged.fits)
 
-6 Plot data
+++++++++++++++++++++
+Environment setting
+++++++++++++++++++++
+The location must be able to access to the path:  /proj/sot/ska/bin/python. it is not 
+compatible with ascds environment. if you like to run under ascds environment, run:
 
-	/opt/local/bin/perl /data/mta/MTA/bin/sib_corr_plot_lres.perl <year> <month>
-	/opt/local/bin/perl ./Sib_corr/sib_corr_plot_lres.perl (for Lev 2)
-		----- run this on rhodes (need to access /data/mta4/MTA/data/no_data.gif)
+setenv PYTHONPATH "/proj/sot/ska/arch/x86_64-linux_CentOS-5/lib/python2.7/site-packages:$PYTHONPATH"
 
-	where <year>		year of the observation
-	      <month>		month of the observations
 
-	the results are in ./Plots/
+++++++++++++
+Directories
+++++++++++++
 
-7. Check plots.
-	check plots to see whether any very high dose observations are still around.
-		xv ./Plots/indep_plot_ccd7.gif
+/data/mta/Script/ACIS/SIB/Correct_excess/Sib_corr       ---- this directory, containing all scripts
+/data/mta/Script/ACIS/SIB/Correct_excess/Lev1           ---- level 1 related output kept here
+                                                             esp. see Outidr/lres/ and Reg_files
+/data/mta/Script/ACIS/SIB/Correct_excess/Lev2           ---- level 2 related output kept here
+                                                             esp. see Outidr/lres/ and Reg_files
+/data/mta/Script/ACIS/SIB/Data/Data_<yyyy>_<mm>         ---- lev 1 data for <yyyy> <mm> are kept
+/data/mta/Script/ACIS/SIB/Lev2/Data/Data_<yyyy>_<mm>    ---- lev 2 data for <yyyy> <mm> are kept
+/data/mta/Script/ACIS/SIB/house_keeping                 ---- templates for html pages are kept here
 
-	if you find one, find which one is the high dose observation form the list we made.
-	go to ./Outdir/lres/, make ./Outdir/lres/save/ dirctory and move that data to the directory
+/data/mta/www/mta_sib                                   ---- html page related files, including plots 
 
-	to do this more efficiently, run ./Sib_corr/find_time.perl > tlist
-	then dmlist "./Data/lres_ccd7_merged.fits[cols time,med]" opt=data > zout
 
-	and find all sources count rate > 150 or so (you can decide the level).
++++++++++
+Cron Jobs
++++++++++
+50 22 2,10,20,30  * * cd /data/mta/Script/ACIS/SIB/Correct_excess/Lev2; /data/mta/Script/ACIS/SIB/Correct_excess/Sib_corr/run_extract_evt2_wrap_script>> $HOME/Logs/sib_lev2_data.cron
 
-	run step 5 and 6 to see whether all the high doese/extended sources are removed.
-	if not, just repeat.
+50 22 2,10,20,30  * * cd /data/mta/Script/ACIS/SIB/Correct_excess/Lev1; /data/mta/Script/ACIS/SIB/Correct_excess/Sib_corr/run_extract_evt1_wrap_script>> $HOME/Logs/sib_lev1_data.cron
 
-8. Created plots for long terms for lev 2 data
-
-	run:
-		/opt/local/bin/perl Sib_corr/acis_sib_one_year_plot_lev2.perl
-		/opt/local/bin/perl Sib_corr/acis_sib_long_term_lev2.perl
-		/opt/local/bin/perl Sib_corr/acis_sib_comb_plot_lev2.perl
-	and 
-		/opt/local/bin/perl Sib_corr/update_lev2_html.perl
-
-8. Clearn up.
-	move all resulted fits files (from Data directory) and plots (from Plots) to a web site
-	/data/mta/www/mta_sib/...
-
-	then, remove all fits files from Input, Outdir, and Data. It could take upto 10% of a disk space.
+15 3  3 * *   cd /data/mta/Script/ACIS/SIB/Correct_excess/; /data/mta/Script/ACIS/SIB/Correct_excess/Sib_corr/run_create_wrap_script >> $HOME/Logs/sib_lev2_create.cron
 
